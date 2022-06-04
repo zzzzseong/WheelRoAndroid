@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobileprogramingproject_7.databinding.ActivityMainBinding
 import com.example.mobileprogramingproject_7.databinding.ActivityWheelchairBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class WheelchairActivity : AppCompatActivity() {
     lateinit var binding: ActivityWheelchairBinding
@@ -36,6 +38,8 @@ class WheelchairActivity : AppCompatActivity() {
     }
 
     private fun setRecyclerView() {
+
+        getDBdata()
         //리뷰 Data Class 가져와서 리사이클러뷰 초기화해야함
         val recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -49,6 +53,20 @@ class WheelchairActivity : AppCompatActivity() {
         val adapter = RevAdapter(reviews)
         recyclerView.adapter = adapter
 
+    }
+
+    private fun getDBdata() {
+//        val db = Firebase.firestore
+//        db.collection("users")
+//            .get()
+//            .addOnSuccessListener {
+//                for(document in it){
+//
+//                }
+//            }
+//            .addOnFailureListener {
+//                it.printStackTrace()
+//            }
     }
 
     private fun setDataLayout() {

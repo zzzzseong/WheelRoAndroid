@@ -33,6 +33,10 @@ class CenterActivity : AppCompatActivity() {
             arriveBtn.setOnClickListener {
 
             }
+
+            rvplusBtn.setOnClickListener {
+
+            }
         }
     }
 
