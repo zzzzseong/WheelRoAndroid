@@ -33,6 +33,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Design.Light.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,6 +56,20 @@
                     android:scheme="kakao916252b1d687bf94d0ebf57bf3f59fcb" />
             </intent-filter>
         </activity>
+        <activity android:name=".CenterActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Dialog"
+            />
+        <activity android:name=".ReviewPopupActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MobileProgramingProject_7.PopupOverlay"
+            />
+        <activity android:name=".WheelchairActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MobileProgramingProject_7.NoActionBar"
+            >
+        </activity>
+
     </application>
 
 </manifest>
