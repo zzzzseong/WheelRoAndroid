@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MobileProgramingProject_7.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MobileProgramingProject_7.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MobileProgramingProject_7.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MobileProgramingProject_7.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MobileProgramingProject_7.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MobileProgramingProject_7.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.MobileProgramingProject_7.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.MobileProgramingProject_7.app.main.iml" />
     </modules>
   </component>
 </project>
