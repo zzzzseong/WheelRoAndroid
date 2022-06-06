@@ -1,18 +1,27 @@
 package com.example.mobileprogramingproject_7
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mobileprogramingproject_7.UserInfo.db
+import com.example.mobileprogramingproject_7.UserInfo.userID
 import com.example.mobileprogramingproject_7.databinding.ActivityMainBinding
 import com.example.mobileprogramingproject_7.databinding.ActivityWheelchairBinding
+import com.google.firebase.firestore.auth.User
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class WheelchairActivity : AppCompatActivity() {
     lateinit var binding: ActivityWheelchairBinding
+    lateinit var centerName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWheelchairBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        UserInfo.getListdata()
         setDataLayout()
         setRecyclerView()
         setOnClick()
@@ -32,24 +41,42 @@ class WheelchairActivity : AppCompatActivity() {
             arriveBtn.setOnClickListener {
 
             }
+            rvplusBtn.setOnClickListener {
+                val intent = Intent(applicationContext, ReviewPopupActivity::class.java)
+                intent.putExtra("centerName", centerName)
+                startActivity(intent)
+            }
         }
     }
 
     private fun setRecyclerView() {
-        //리뷰 Data Class 가져와서 리사이클러뷰 초기화해야함
+
         val recyclerView = binding.recyclerview
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
 
-        //리뷰 디비 구현하기 - 센터명 같은 데이터로 리스트 넘김
         val reviews = ArrayList<DataReview>()
-        reviews.add(DataReview("사용자이름1", "리뷰내용", "센터"))
-        reviews.add(DataReview("사용자이름2", "리뷰내용", "센터"))
-        reviews.add(DataReview("사용자이름3", "리뷰내용", "센터"))
 
-        val adapter = RevAdapter(reviews)
-        recyclerView.adapter = adapter
+
+        db.collection("Centers")
+            .document(centerName)
+            .collection("userID")
+            .get()
+            .addOnSuccessListener {
+                for(document in it){
+                    val uid = document.id
+                    val rv = document.getString("reviewString")!!
+                    reviews.add(DataReview(uid,rv,centerName))
+                    Log.d("logger", "id: $uid, rv: $rv")
+                }
+                val adapter = RevAdapter(reviews)
+                recyclerView.adapter = adapter
+            }
+            .addOnFailureListener {
+                it.printStackTrace()
+            }
 
     }
+
 
     private fun setDataLayout() {
         //인텐트로 DataWheelchair객체 넘김
@@ -57,8 +84,11 @@ class WheelchairActivity : AppCompatActivity() {
 
         //테스트용객체
         val manager = DataManager()
-        Thread.sleep(3000L)
+        Thread.sleep(5000L)
         val data = manager.wheelchair[0]
+
+        centerName = "Center1"
+
 
         binding.apply {
             TitleView.text = data.fcltyNm

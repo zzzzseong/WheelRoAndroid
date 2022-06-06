@@ -8,28 +8,23 @@ import com.example.mobileprogramingproject_7.databinding.RevRowBinding
 
 class RevAdapter(val reviews : ArrayList<DataReview>) : RecyclerView.Adapter<RevAdapter.ViewHolder>() {
 
+
+    inner class ViewHolder(val binding: RevRowBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        return ViewHolder(
-            RevRowBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
-
+        val binding = RevRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.id.text = reviews[position].userID
-        holder.review.text = reviews[position].review
+        holder.binding.revId.text = reviews[position].userID
+        holder.binding.revStr.text = reviews[position].review
     }
 
-    override fun getItemCount(): Int = reviews.size
-
-    inner class ViewHolder(val binding: RevRowBinding) : RecyclerView.ViewHolder(binding.root) {
-        val id = binding.revId
-        val review = binding.revStr
+    override fun getItemCount(): Int {
+        return reviews.size
     }
 
 }

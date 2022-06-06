@@ -2,8 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="350dp"
+    android:layout_height="700dp"
+    android:layout_gravity="center"
     tools:context=".WheelchairActivity">
 
     <LinearLayout
@@ -276,13 +277,32 @@
                 />
         </LinearLayout>
 
-        <TextView
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="리뷰"
-            android:gravity="center"
-            android:background="#F3F3F3"
-            />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="리뷰"
+                android:gravity="center"
+                android:background="#F3F3F3"
+                android:id="@+id/review"
+                android:layout_centerInParent="true"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="작성하기"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:id="@+id/rvplusBtn"
+                />
+
+
+        </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:padding="10dp"

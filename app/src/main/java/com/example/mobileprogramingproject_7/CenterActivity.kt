@@ -1,13 +1,17 @@
 package com.example.mobileprogramingproject_7
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobileprogramingproject_7.databinding.ActivityCenterBinding
 import com.example.mobileprogramingproject_7.databinding.ActivityWheelchairBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class CenterActivity : AppCompatActivity() {
     lateinit var binding : ActivityCenterBinding
+    lateinit var centerName : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,12 @@ class CenterActivity : AppCompatActivity() {
             arriveBtn.setOnClickListener {
 
             }
+
+            rvplusBtn.setOnClickListener {
+                val intent = Intent(applicationContext, ReviewPopupActivity::class.java)
+                intent.putExtra("centerName", centerName)
+                startActivity(intent)
+            }
         }
     }
 
@@ -41,11 +51,25 @@ class CenterActivity : AppCompatActivity() {
         val recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        //리뷰 디비 구현하기 - 센터명같은 리뷰 찾아서 가져오기
         val reviews = ArrayList<DataReview>()
-        reviews.add(DataReview("사용자이름1", "리뷰내용", "센터"))
-        reviews.add(DataReview("사용자이름2", "리뷰내용", "센터"))
-        reviews.add(DataReview("사용자이름3", "리뷰내용", "센터"))
+
+        val db = Firebase.firestore
+        db.collection("Centers")
+            .document(centerName)
+            .collection("userID")
+            .whereEqualTo("centerType", "Center")
+            .get()
+            .addOnSuccessListener {
+                for(document in it){
+                    val id = document.id
+                    val rv = document.getString("reviewString")!!
+                    reviews.add(DataReview(UserInfo.userID,rv,id))
+                }
+            }
+            .addOnFailureListener {
+                it.printStackTrace()
+
+            }
 
         val adapter = RevAdapter(reviews)
         recyclerView.adapter = adapter
@@ -58,6 +82,8 @@ class CenterActivity : AppCompatActivity() {
         val manager = DataManager()
         Thread.sleep(3000L)
         val data = manager.center[0]
+
+        centerName = data.tfcwkerMvmnCnterNm
 
         binding.apply {
             TitleView.text = data.tfcwkerMvmnCnterNm

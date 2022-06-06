@@ -3,6 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/drawable/star.xml" value="0.2285" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/activity_center.xml" value="0.25" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/activity_login.xml" value="0.221875" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/activity_mypage.xml" value="0.221875" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/activity_review_popup.xml" value="0.29635416666666664" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/activity_wheelchair.xml" value="0.18" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/fav_row.xml" value="0.2635416666666667" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/fragment_bookmark.xml" value="0.221875" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/fragment_review.xml" value="0.221875" />
+        <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/rev_row.xml" value="0.2635416666666667" />
+=======
         <entry key="..\:/mob/fork3/fork2/app/src/main/res/layout/activity_centermap.xml" value="0.22826086956521738" />
         <entry key="..\:/mob/fork3/fork2/app/src/main/res/layout/activity_test.xml" value="0.1125" />
         <entry key="..\:/mob/fork3/fork2/app/src/main/res/layout/activity_wheelchairmap.xml" value="0.22826086956521738" />
@@ -19,6 +31,7 @@
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.161231884057971" />
         <entry key="app/src/main/res/layout/fragment_review.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.161231884057971" />
+>>>>>>> 6a60a22842a1edf29f2ae08124a48d4d8df54f45
       </map>
     </option>
   </component>
