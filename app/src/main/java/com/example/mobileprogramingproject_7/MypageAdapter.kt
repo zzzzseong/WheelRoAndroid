@@ -14,9 +14,9 @@ class MypageAdapter(fragmentActivity: FragmentActivity)
 
     override fun createFragment(position: Int): Fragment {
         return when(position){
-            0 -> BookmarkFragment()
+            0 -> FavoriteFragment()
             1 -> ReviewFragment()
-            else -> BookmarkFragment()
+            else -> FavoriteFragment()
         }
     }
 }
