@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Data Load Complete", Toast.LENGTH_SHORT).show() //
             finish()
         },DURATION)
-
     }
 }
 

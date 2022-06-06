@@ -30,6 +30,7 @@ class MypageActivity : AppCompatActivity() {
             }else if(user != null){
                 var url = user.kakaoAccount?.profile?.profileImageUrl
 
+                // Glide (이미지를 빠르고 효율적으로 불러올 수 있게 도와주는 안드로이드용 이미지 로딩 라이브러리) 사용
                 Glide.with(this)
                     .load(url)
                     .into(binding.profile)
@@ -48,8 +49,8 @@ class MypageActivity : AppCompatActivity() {
 
         // 로그아웃
         binding.logoutBtn.setOnClickListener {
-            // 로그아웃
-            //UserApiClient.instance.unlink / logout
+            // 로그아웃 시 로그인 화면으로 이동
+            // UserApiClient.instance.unlink / logout
             UserApiClient.instance.unlink { error ->
                 if (error != null) {
                     Toast.makeText(this, "로그아웃 실패. SDK에서 토큰 삭제됨",Toast.LENGTH_SHORT).show()
