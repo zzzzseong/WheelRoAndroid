@@ -15,7 +15,6 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  * Use the [BookmarkFragment.newInstance] factory method to
  * create an instance of this fragment.
- */
 
 // 즐겨찾기 관련 데이터 리사이클러뷰로
 class BookmarkFragment : Fragment() {
