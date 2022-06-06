@@ -3,6 +3,10 @@
     package="com.example.mobileprogramingproject_7">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 지도 관련 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".KakaoApplication"
@@ -12,6 +16,7 @@
         android:networkSecurityConfig="@xml/network_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.MobileProgramingProject_7">
         <activity
             android:name=".MypageActivity"
@@ -28,12 +33,19 @@
             android:exported="false"
             android:theme="@style/Theme.MobileProgramingProject_7.NoActionBar"/>
 
+        <activity android:name=".WheelchairMapActivity"/>
+        <activity android:name=".CenterMapActivity"/>
+
         <!-- 로딩(스플래시) 액티비티. 액션바 안보이게 제거 - 윤섭 -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Design.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!-- 카카오 로그인 Redirect URI 관련 설정 - 윤섭 -->
         <activity
@@ -71,6 +83,10 @@
             android:theme="@style/Theme.MobileProgramingProject_7.NoActionBar"
             >
         </activity>
+        <!-- 카카오 지도 api 사용 - 주한 -->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="916252b1d687bf94d0ebf57bf3f59fcb"/>
 
     </application>
 

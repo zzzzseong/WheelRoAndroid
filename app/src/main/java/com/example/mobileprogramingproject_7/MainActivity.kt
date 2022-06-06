@@ -2,14 +2,17 @@ package com.example.mobileprogramingproject_7
 
 import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import com.example.mobileprogramingproject_7.databinding.ActivityMainBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.security.MessageDigest
 
 // Splash Activity // 데이터 로딩과 함께 앱 로고 등 보여주며 delay
 class MainActivity : AppCompatActivity() {
@@ -22,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //        Thread.sleep(3000L) //coroutine끝날때까지 3초 대기
+
 
         Handler().postDelayed({
             val intent = Intent(this, LoginActivity::class.java)
