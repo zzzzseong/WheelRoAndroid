@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
     android:layout_height="700dp"
+    android:orientation="vertical"
     android:layout_gravity="center"
     tools:context=".WheelchairActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
         <!-- <a href="https://www.flaticon.com/kr/free-icons/" title="닫기 아이콘">닫기 아이콘  제작자: Pavel Kozlov - Flaticon</a>-->
 
@@ -277,41 +273,66 @@
                 />
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/callBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="리뷰"
-                android:gravity="center"
-                android:background="#F3F3F3"
-                android:id="@+id/review"
-                android:layout_centerInParent="true"
-                />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="작성하기"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:id="@+id/rvplusBtn"
-                />
+            android:layout_gravity="center"
+            android:background="@drawable/btnbackground"
+            android:text="전화 연결" />
 
-
-        </RelativeLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:padding="10dp"
+        <Button
+            android:id="@+id/reviewBtn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#EAEAEA"
-            android:id="@+id/recyclerview"
-            />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/callBtn"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btnbackground"
+            android:text="리뷰 보기" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-</ScrollView>
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/relativeLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            >-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="리뷰"-->
+<!--                android:gravity="center"-->
+<!--                android:background="#F3F3F3"-->
+<!--                android:id="@+id/review"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                />-->
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="작성하기"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:layout_gravity="right"-->
+<!--                android:gravity="center"-->
+<!--                android:id="@+id/rvplusBtn"-->
+<!--                />-->
+
+
+<!--        </RelativeLayout>-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:padding="10dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="#EAEAEA"-->
+<!--            android:id="@+id/recyclerview"-->
+<!--            />-->
+
+</LinearLayout>
