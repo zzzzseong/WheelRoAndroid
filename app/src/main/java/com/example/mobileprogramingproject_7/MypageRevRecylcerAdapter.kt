@@ -28,7 +28,8 @@ class MypageRevRecylcerAdapter(
     }
 
     override fun onBindViewHolder(holder: MypageRevRecylcerAdapter.ViewHolder, position: Int) {
-        holder.id.text = values[position].userID
+//        holder.id.text = values[position].userID
+        holder.id.text = values[position].centerName // 기존 이름 출력부분에 센터이름 출력
         holder.review.text = values[position].review
     }
 
@@ -40,10 +41,6 @@ class MypageRevRecylcerAdapter(
 //        val image: ImageView = binding.revPrfImgView
         val id:TextView = binding.revId
         val review:TextView = binding.revStr
-
-//        override fun toString(): String {
-//            return super.toString() + " '" + contentView.text + "'"
-//        }
     }
 
 }

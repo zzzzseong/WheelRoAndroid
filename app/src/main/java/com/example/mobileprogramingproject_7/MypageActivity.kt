@@ -1,25 +1,29 @@
 package com.example.mobileprogramingproject_7
 
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.mobileprogramingproject_7.databinding.ActivityMypageBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.firestore.auth.User
 import com.kakao.sdk.user.UserApiClient
 
 // 마이페이지 액티비티 입니다. - 윤섭
 class MypageActivity : AppCompatActivity() {
     lateinit var binding: ActivityMypageBinding
     val textarr = arrayListOf<String>("즐겨찾기", "나의 리뷰")
-//    val iconarr = arrayListOf<Int>(R.drawable.~~, )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMypageBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initLayout()
+        Log.i(ContentValues.TAG, "로그) MypageActivity Created with getListData() by userID")
     }
 
     private fun initLayout(){
@@ -28,14 +32,14 @@ class MypageActivity : AppCompatActivity() {
             if(error != null){
                 Toast.makeText(this, "사용자 정보 불러오기 실패", Toast.LENGTH_SHORT).show()
             }else if(user != null){
-                var url = user.kakaoAccount?.profile?.profileImageUrl
+                val url = user.kakaoAccount?.profile?.profileImageUrl
 
                 // Glide (이미지를 빠르고 효율적으로 불러올 수 있게 도와주는 안드로이드용 이미지 로딩 라이브러리) 사용
                 Glide.with(this)
                     .load(url)
                     .into(binding.profile)
-//                Toast.makeText(this, "${user.kakaoAccount?.profile}", Toast.LENGTH_SHORT).show()
-                binding.nickname.text = user.kakaoAccount?.profile?.nickname
+
+                binding.nickname.text = UserInfo.userNick
             }
         }
 
@@ -64,5 +68,6 @@ class MypageActivity : AppCompatActivity() {
                 }
             }
         }
+        Log.i(ContentValues.TAG, "로그) InitLayout Done in MypageActivity")
     }
 }

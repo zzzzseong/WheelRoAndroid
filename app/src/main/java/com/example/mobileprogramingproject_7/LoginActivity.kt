@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.example.mobileprogramingproject_7.databinding.ActivityLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
@@ -27,6 +28,18 @@ class LoginActivity : AppCompatActivity() {
             }
             else if (tokenInfo != null) {
                 Toast.makeText(this, "토큰 정보 보기 성공. 로그인 기록 있음", Toast.LENGTH_SHORT).show()
+
+                // Login 성공시 UserInfo Update
+                UserApiClient.instance.me { user, error ->
+                    if(error != null){
+                        Toast.makeText(this, "사용자 정보 불러오기 실패", Toast.LENGTH_SHORT).show()
+                    }else if(user != null){
+                        // UserInfo 설정
+                        UserInfo.userID = user.kakaoAccount?.email.toString()
+                        UserInfo.userNick = user.kakaoAccount?.profile?.nickname.toString()
+                    }
+                }
+
                 val intent = Intent(this, TestActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
@@ -66,6 +79,18 @@ class LoginActivity : AppCompatActivity() {
             }
             else if (token != null) {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+
+                // Login 성공시 UserInfo Update
+                UserApiClient.instance.me { user, error ->
+                    if(error != null){
+                        Toast.makeText(this, "사용자 정보 불러오기 실패", Toast.LENGTH_SHORT).show()
+                    }else if(user != null){
+                        // UserInfo 설정
+                        UserInfo.userID = user.kakaoAccount?.email.toString()
+                        UserInfo.userNick = user.kakaoAccount?.profile?.nickname.toString()
+                    }
+                }
+
                 val intent = Intent(this, TestActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()

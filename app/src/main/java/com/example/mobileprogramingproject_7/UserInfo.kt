@@ -9,14 +9,19 @@ import com.google.firebase.ktx.Firebase
 
 object UserInfo {
 
-    val userID = "jisukelly9@naver.com"
+//    val userID = "jisukelly9@naver.com"
+    lateinit var userID:String // MypageActivity 에서 지정해줌 - 윤섭
     //나중에 카카오 API에서 가져오는걸로 바꿔야함
+    lateinit var userNick:String
 
     lateinit var db : FirebaseFirestore
     val userRVList = ArrayList<DataReview>()
     val userFavList = ArrayList<DataFav>()
 
     fun getListdata() {
+        userRVList.clear()
+        userFavList.clear()
+
         db = Firebase.firestore
         db.collection("Users").document(userID).collection("review")
             .get()
@@ -25,9 +30,11 @@ object UserInfo {
                     val centerName = document.id
                     val type = document.getString("centerType")
                     val str = document.getString("reviewString")!!
-                    Log.i(ContentValues.TAG, "centerName : ${centerName}, type : ${type}, str : ${str}")
-                    userRVList.add(DataReview(userID,str, centerName))
+//                    Log.i(ContentValues.TAG, "centerName : ${centerName}, type : ${type}, str : ${str}")
+                    userRVList.add(DataReview(userID, str, centerName))
                 }
+                Log.i(ContentValues.TAG, "로그) ${UserInfo.userRVList.size} rev list size in UserInfo.getListData")
+
             }
             .addOnFailureListener {
                 Log.d("logger","GET USER REVIEW DATA FAILED")
@@ -42,6 +49,9 @@ object UserInfo {
                     val type = document.getString("centerType")!!
                     userFavList.add(DataFav(userID,centerName,type))
                 }
+
+                Log.i(ContentValues.TAG, "로그) ${UserInfo.userFavList.size} fav list size in UserInfo.getListData")
+
             }.addOnFailureListener {
                 Log.d("logger","GET USER FAV DATA FAILED")
                 it.printStackTrace()
