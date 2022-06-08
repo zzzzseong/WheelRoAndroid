@@ -1,6 +1,8 @@
 package com.example.mobileprogramingproject_7
 
+import android.content.ContentValues
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -23,6 +25,7 @@ object UserInfo {
                     val centerName = document.id
                     val type = document.getString("centerType")
                     val str = document.getString("reviewString")!!
+                    Log.i(ContentValues.TAG, "centerName : ${centerName}, type : ${type}, str : ${str}")
                     userRVList.add(DataReview(userID,str, centerName))
                 }
             }

@@ -10,7 +10,7 @@ import com.example.mobileprogramingproject_7.databinding.RevRowBinding
 // Review Fragment 에 부착하는 Adapter 입니다 - 윤섭
 // UserID(여기서는 이메일 의미) 에 해당하는 DataReview 받아서 바인딩 해주는 역할
 class MypageRevRecylcerAdapter(
-    private val values:List<DataReview>
+    private val values:ArrayList<DataReview>
 )
     : RecyclerView.Adapter<MypageRevRecylcerAdapter.ViewHolder>(){
 
