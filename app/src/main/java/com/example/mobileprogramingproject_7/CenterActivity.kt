@@ -1,6 +1,7 @@
 package com.example.mobileprogramingproject_7
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +19,7 @@ class CenterActivity : AppCompatActivity() {
         binding = ActivityCenterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setDataLayout()
-        setRecyclerView()
+//        setRecyclerView()
         setOnClick()
 
     }
@@ -38,42 +39,42 @@ class CenterActivity : AppCompatActivity() {
 
             }
 
-            rvplusBtn.setOnClickListener {
-                val intent = Intent(applicationContext, ReviewPopupActivity::class.java)
-                intent.putExtra("centerName", centerName)
-                startActivity(intent)
-            }
+//            rvplusBtn.setOnClickListener {
+//                val intent = Intent(applicationContext, ReviewPopupActivity::class.java)
+//                intent.putExtra("centerName", centerName)
+//                startActivity(intent)
+//            }
         }
     }
 
-    private fun setRecyclerView() {
-        //리뷰 Data Class 가져와서 리사이클러뷰 초기화해야함
-        val recyclerView = binding.recyclerview
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-        val reviews = ArrayList<DataReview>()
-
-        val db = Firebase.firestore
-        db.collection("Centers")
-            .document(centerName)
-            .collection("userID")
-            .whereEqualTo("centerType", "Center")
-            .get()
-            .addOnSuccessListener {
-                for(document in it){
-                    val id = document.id
-                    val rv = document.getString("reviewString")!!
-                    reviews.add(DataReview(UserInfo.userID,rv,id))
-                }
-            }
-            .addOnFailureListener {
-                it.printStackTrace()
-
-            }
-
-        val adapter = RevAdapter(reviews)
-        recyclerView.adapter = adapter
-    }
+//    private fun setRecyclerView() {
+//        //리뷰 Data Class 가져와서 리사이클러뷰 초기화해야함
+//        val recyclerView = binding.recyclerview
+//        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+//
+//        val reviews = ArrayList<DataReview>()
+//
+//        val db = Firebase.firestore
+//        db.collection("Centers")
+//            .document(centerName)
+//            .collection("userID")
+//            .whereEqualTo("centerType", "Center")
+//            .get()
+//            .addOnSuccessListener {
+//                for(document in it){
+//                    val id = document.id
+//                    val rv = document.getString("reviewString")!!
+//                    reviews.add(DataReview(UserInfo.userID,rv,id))
+//                }
+//            }
+//            .addOnFailureListener {
+//                it.printStackTrace()
+//
+//            }
+//
+//        val adapter = RevAdapter(reviews)
+//        recyclerView.adapter = adapter
+//    }
 
     private fun setDataLayout() {
         //인텐트로 DataWheelchair객체 넘김
@@ -102,6 +103,12 @@ class CenterActivity : AppCompatActivity() {
 
             var areastr = "관내 " +data.outsideOpratArea+"\n관외 "+data.insideOpratArea
             areaView.text = areastr
+
+            callBtn.setOnClickListener {
+                val intentCall = Intent(Intent.ACTION_CALL, Uri.parse(data.phoneNumber))
+                startActivity(intentCall)
+            }
+
         }
 
     }

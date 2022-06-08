@@ -5,6 +5,7 @@
     android:layout_width="350dp"
     android:layout_height="700dp"
     android:layout_gravity="center"
+    android:background="#ffffff"
     tools:context=".WheelchairActivity"
     android:orientation="vertical">
 
@@ -30,7 +31,7 @@
         />
 
     <LinearLayout
-        android:padding="30dp"
+        android:layout_marginVertical="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -40,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="출발"
+            android:background="@drawable/btnbackground"
             android:id="@+id/startBtn"
             />
         <Button
@@ -47,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="☆"
+            android:background="@drawable/btnbackground"
             android:id="@+id/favBtn"
             />
         <Button
@@ -54,6 +57,7 @@
             android:layout_height="wrap_content"
             android:text="도착"
             android:id="@+id/arriveBtn"
+            android:background="@drawable/btnbackground"
             />
     </LinearLayout>
 
@@ -105,54 +109,6 @@
             />
     </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:padding="10dp"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:gravity="center"-->
-<!--        >-->
-<!--        <TextView-->
-<!--            android:gravity="center"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:text="홈페이지"-->
-<!--            />-->
-
-<!--        <TextView-->
-<!--            android:gravity="center"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/wheelInternetView"-->
-<!--            android:layout_weight="3"-->
-<!--            />-->
-<!--    </LinearLayout>-->
-
-<!--    <LinearLayout-->
-<!--        android:padding="10dp"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:gravity="center"-->
-<!--        >-->
-<!--        <TextView-->
-<!--            android:gravity="center"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:text="관리기관"-->
-<!--            />-->
-
-<!--        <TextView-->
-<!--            android:gravity="center"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/wheelfclityView"-->
-<!--            android:layout_weight="3"-->
-<!--            />-->
-<!--    </LinearLayout>-->
-
     <LinearLayout
         android:padding="10dp"
         android:layout_width="match_parent"
@@ -199,42 +155,74 @@
             android:id="@+id/timeView"
             android:layout_weight="3"
             />
+
+
+
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="리뷰"
-            android:gravity="center"
-            android:background="#F3F3F3"
-            android:id="@+id/review"
-            android:layout_centerInParent="true"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="작성하기"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:gravity="center"
-            android:id="@+id/rvplusBtn"
-            />
+        android:layout_height="match_parent"
+        android:gravity="center"
+            >
 
+        <Button
+            android:id="@+id/callBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/btnbackground"
+            android:text="전화 연결" />
+
+        <Button
+            android:id="@+id/reviewBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/callBtn"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btnbackground"
+            android:text="리뷰 보기" />
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#EAEAEA"
-        android:id="@+id/recyclerview"
-        />
+
+
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/relativeLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        >-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="리뷰"-->
+<!--            android:gravity="center"-->
+<!--            android:background="#F3F3F3"-->
+<!--            android:id="@+id/review"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            />-->
+<!--        <Button-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="작성하기"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_gravity="right"-->
+<!--            android:gravity="center"-->
+<!--            android:id="@+id/rvplusBtn"-->
+<!--            />-->
+
+
+<!--    </RelativeLayout>-->
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:padding="10dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="#EAEAEA"-->
+<!--        android:id="@+id/recyclerview"-->
+<!--        />-->
 
 
 

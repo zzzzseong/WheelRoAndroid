@@ -1,6 +1,7 @@
 package com.example.mobileprogramingproject_7
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,7 +24,7 @@ class WheelchairActivity : AppCompatActivity() {
         setContentView(binding.root)
         UserInfo.getListdata()
         setDataLayout()
-        setRecyclerView()
+//        setRecyclerView()
         setOnClick()
 
     }
@@ -41,41 +42,45 @@ class WheelchairActivity : AppCompatActivity() {
             arriveBtn.setOnClickListener {
 
             }
-            rvplusBtn.setOnClickListener {
-                val intent = Intent(applicationContext, ReviewPopupActivity::class.java)
-                intent.putExtra("centerName", centerName)
-                startActivity(intent)
+
+            callBtn.setOnClickListener {
+
             }
+//            rvplusBtn.setOnClickListener {
+//                val intent = Intent(applicationContext, ReviewPopupActivity::class.java)
+//                intent.putExtra("centerName", centerName)
+//                startActivity(intent)
+//            }
         }
     }
 
-    private fun setRecyclerView() {
-
-        val recyclerView = binding.recyclerview
-        recyclerView.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-
-        val reviews = ArrayList<DataReview>()
-
-
-        db.collection("Centers")
-            .document(centerName)
-            .collection("userID")
-            .get()
-            .addOnSuccessListener {
-                for(document in it){
-                    val uid = document.id
-                    val rv = document.getString("reviewString")!!
-                    reviews.add(DataReview(uid,rv,centerName))
-                    Log.d("logger", "id: $uid, rv: $rv")
-                }
-                val adapter = RevAdapter(reviews)
-                recyclerView.adapter = adapter
-            }
-            .addOnFailureListener {
-                it.printStackTrace()
-            }
-
-    }
+//    private fun setRecyclerView() {
+//
+//        val recyclerView = binding.recyclerview
+//        recyclerView.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+//
+//        val reviews = ArrayList<DataReview>()
+//
+//
+//        db.collection("Centers")
+//            .document(centerName)
+//            .collection("userID")
+//            .get()
+//            .addOnSuccessListener {
+//                for(document in it){
+//                    val uid = document.id
+//                    val rv = document.getString("reviewString")!!
+//                    reviews.add(DataReview(uid,rv,centerName))
+//                    Log.d("logger", "id: $uid, rv: $rv")
+//                }
+//                val adapter = RevAdapter(reviews)
+//                recyclerView.adapter = adapter
+//            }
+//            .addOnFailureListener {
+//                it.printStackTrace()
+//            }
+//
+//    }
 
 
     private fun setDataLayout() {
@@ -101,6 +106,11 @@ class WheelchairActivity : AppCompatActivity() {
             timestr+="공휴일 "+data.holidayOperOpenHhmm+" ~ "+data.holidayCloseOpenHhmm
 
             timeView.text = timestr
+
+            callBtn.setOnClickListener {
+                val intentCall = Intent(Intent.ACTION_CALL, Uri.parse(data.institutionPhoneNumber))
+                startActivity(intentCall)
+            }
         }
 
     }
