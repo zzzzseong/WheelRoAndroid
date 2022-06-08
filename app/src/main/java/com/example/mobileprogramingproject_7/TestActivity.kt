@@ -3,6 +3,7 @@ package com.example.mobileprogramingproject_7
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import com.example.mobileprogramingproject_7.databinding.ActivityTestBinding
@@ -33,6 +34,11 @@ class TestActivity : AppCompatActivity() {
         }
 
         binding.button2.setOnClickListener {
+//            Handler().postDelayed({
+//                UserInfo.getListdata()
+//            },2000L)
+            UserInfo.getListdata()
+            Thread.sleep(1000L)
             val intent = Intent(this, MypageActivity::class.java)
             startActivity(intent)
         }

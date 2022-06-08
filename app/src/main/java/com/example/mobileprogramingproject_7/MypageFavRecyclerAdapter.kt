@@ -9,7 +9,7 @@ import com.example.mobileprogramingproject_7.databinding.FavRowBinding
 //  FavFragment 에 부착하는 Adapter 입니다 - 윤섭
 // UserID(여기서는 이메일 의미) 에 해당하는 DataFav 받아서 바인딩 해주는 역할
 class MypageFavRecyclerAdapter(
-    private val values:List<DataFav>
+    private val values:ArrayList<DataFav>
 )
     : RecyclerView.Adapter<MypageFavRecyclerAdapter.ViewHolder>(){
 
