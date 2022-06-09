@@ -1,6 +1,7 @@
 package com.example.mobileprogramingproject_7
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,10 +10,15 @@ import android.widget.Toast
 import com.example.mobileprogramingproject_7.UserInfo.db
 import com.example.mobileprogramingproject_7.databinding.ActivityCenterBinding
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class CenterActivity : AppCompatActivity() {
     lateinit var binding : ActivityCenterBinding
     lateinit var centerName : String
+
+    private var changeLatitude = 0.0
+    private var changeLongitude = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,27 +37,41 @@ class CenterActivity : AppCompatActivity() {
             }
 
             favBtn.setOnClickListener {
-                db.collection("Users")
+                //임시
+                db = Firebase.firestore
+                UserInfo.userID = "jisukelly9@naver.com"
+
+                val col = db.collection("Users")
                     .document(UserInfo.userID)
                     .collection("favorite")
                     .document(centerName)
                     .get()
                     .addOnSuccessListener {
-                        if(it==null){
+                        if(it.get("centerType")==null){
                             addFav()
-                        }else{
+                        }else
                             delFav()
-                        }
-                    }.addOnFailureListener {
-                        it.printStackTrace()
                     }
-
 
             }
 
             arriveBtn.setOnClickListener {
+                var myLatitude = intent.getStringExtra("myLatitude")
+                var myLongitude = intent.getStringExtra("myLongitude")
+
+                val url : String ="kakaomap://route?sp=$myLatitude,$myLongitude&ep=$changeLatitude,$changeLongitude&by=FOOT"
+                var intent =  Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                intent.addCategory(Intent.CATEGORY_BROWSABLE)
+                var list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                //startActivity(intent)
+                if (list.equals("") && list.isEmpty()){
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=net.daum.android.map")))
+                }else{
+                    startActivity(intent)
+                }
 
             }
+
         }
 
 
@@ -67,48 +87,50 @@ class CenterActivity : AppCompatActivity() {
     private fun setDataLayout() {
         //인텐트로 DataWheelchair객체 넘김
         //val data = intent.getSerializableExtra("center") as DataCenter
+        for (data in DataManager.center) {
+            if (data.tfcwkerMvmnCnterNm == intent.getStringExtra("name")) {
+                centerName = data.tfcwkerMvmnCnterNm
+                changeLatitude = data.latitude.toDouble()
+                changeLongitude = data.longitude.toDouble()
 
-        Thread.sleep(3000L)
-        val data = DataManager.center[0]
+                binding.apply {
+                    TitleView.text = data.tfcwkerMvmnCnterNm
+                    AddrView.text = data.rdnmadr
+                    PhoneView.text = data.phoneNumber
+                    trgetView.text = data.useTrget
+                    chargeView.text = data.useCharge
 
-        centerName = data.tfcwkerMvmnCnterNm
+                    var rtime = "평   일 "+data.weekdayRceptOpenHhmm+" ~ "+data.weekdayRceptColseHhmm+"\n"
+                    rtime+="주  말 "+data.wkendRceptOpenHhmm+" ~ "+data.wkendRceptCloseHhmm
+                    rcepttimeView.text = rtime
 
-        binding.apply {
-            TitleView.text = data.tfcwkerMvmnCnterNm
-            AddrView.text = data.rdnmadr
-            PhoneView.text = data.phoneNumber
-            trgetView.text = data.useTrget
-            chargeView.text = data.useCharge
+                    var timestr = "평  일 "+data.weekdayOperOpenHhmm+" ~ "+data.weekdayOperColseHhmm+"\n"
+                    timestr+="주  말 "+data.wkendOperOpenHhmm+" ~ "+data.wkendOperCloseHhmm
+                    timeView.text = timestr
 
-            var rtime = "평   일 "+data.weekdayRceptOpenHhmm+" ~ "+data.weekdayRceptColseHhmm+"\n"
-            rtime+="주  말 "+data.wkendRceptOpenHhmm+" ~ "+data.wkendRceptCloseHhmm
-            rcepttimeView.text = rtime
+                    var areastr = "관내 " +data.outsideOpratArea+"\n관외 "+data.insideOpratArea
+                    areaView.text = areastr
 
-            var timestr = "평  일 "+data.weekdayOperOpenHhmm+" ~ "+data.weekdayOperColseHhmm+"\n"
-            timestr+="주  말 "+data.wkendOperOpenHhmm+" ~ "+data.wkendOperCloseHhmm
-            timeView.text = timestr
+                    callBtn.setOnClickListener {
+                        val intentCall = Intent(Intent.ACTION_CALL, Uri.parse("tel:"+data.phoneNumber))
+                        startActivity(intentCall)
+                    }
 
-            var areastr = "관내 " +data.outsideOpratArea+"\n관외 "+data.insideOpratArea
-            areaView.text = areastr
-
-            callBtn.setOnClickListener {
-                val intentCall = Intent(Intent.ACTION_CALL, Uri.parse(data.phoneNumber))
-                startActivity(intentCall)
+                }
+                break
             }
-
         }
-
     }
 
 
     fun addFav(){
-        val fav = hashMapOf(
+        var fav = hashMapOf(
             "favorite" to false,
             "centerType" to "Center",
             "centerName" to centerName
         )
 
-        UserInfo.db.collection("Centers").document(centerName)
+        db.collection("Centers").document(centerName)
             .collection("userID")
             .document(UserInfo.userID)
             .set(fav, SetOptions.merge())
@@ -119,12 +141,16 @@ class CenterActivity : AppCompatActivity() {
                 Log.w("logger", "Error adding document", e)
             }
 
-        UserInfo.db.collection("Users").document(UserInfo.userID)
+        fav = hashMapOf(
+            "centerType" to "Center",
+            "centerName" to centerName
+        )
+
+        db.collection("Users").document(UserInfo.userID)
             .collection("favorite")
             .document(centerName)
-            .set(fav, SetOptions.merge())
+            .set(fav)
             .addOnSuccessListener {
-                Log.d("logger", "review saved to user DB")
                 Toast.makeText(applicationContext, "즐겨찾기에 등록되었습니다",Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
@@ -144,7 +170,6 @@ class CenterActivity : AppCompatActivity() {
             .document(UserInfo.userID)
             .set(fav, SetOptions.merge())
             .addOnSuccessListener {
-                Log.d("logger", "review saved to center DB")
             }
             .addOnFailureListener { e ->
                 Log.w("logger", "Error adding document", e)
@@ -155,7 +180,7 @@ class CenterActivity : AppCompatActivity() {
             .document(centerName)
             .delete()
             .addOnSuccessListener {
-                Log.d("logger", "review saved to user DB")
+
                 Toast.makeText(applicationContext, "즐겨찾기에서 해제되었습니다",Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->

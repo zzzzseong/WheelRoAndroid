@@ -44,8 +44,10 @@ class ReviewActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 for(document in it){
                     val id = document.id
-                    val rv = document.getString("reviewString")!!
-                    if(rv != "") reviews.add(DataReview(UserInfo.userID,rv,id))
+                    val rv = document.getString("reviewString")
+                    if(rv!=null){
+                        if(rv!="")  reviews.add(DataReview(UserInfo.userID,rv,id))
+                    }
                 }
             }
             .addOnFailureListener {
@@ -55,9 +57,6 @@ class ReviewActivity : AppCompatActivity() {
 
         val adapter = RevAdapter(reviews)
         binding.recyclerView.adapter = adapter
-        binding.cancelBtn.setOnClickListener {
-            finish()
-        }
 
     }
 
