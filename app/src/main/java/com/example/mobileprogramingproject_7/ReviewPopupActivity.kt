@@ -30,7 +30,6 @@ class ReviewPopupActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 if(it!=null){
-                    binding.titleView.text = "리뷰 수정하기"
                     binding.reviewText.setText(it.getString("reviewString"))
                 }
             }
