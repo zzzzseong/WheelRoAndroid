@@ -50,12 +50,8 @@ class WheelchairMapActivity : AppCompatActivity() {
 
         startMap()
         WheelchairMark()
-        if(checkbol){
-            initWheelchairLayout()
-        }
-        else {
-            initCenterLayout()
-        }
+        initWheelchairLayout()
+
 
         //binding.mapView.setCalloutBalloonAdapter(CustomBalloonAdapter(layoutInflater))
         binding.mapView.setPOIItemEventListener(eventListener)
@@ -105,12 +101,14 @@ class WheelchairMapActivity : AppCompatActivity() {
             binding.wheelchairBottomRightBtn.setBackgroundResource(R.drawable.custom_bottom_btn_nonactivated)
             checkbol = true
             WheelchairMark()
+            initWheelchairLayout()
         }
         binding.wheelchairBottomRightBtn.setOnClickListener {
             binding.wheelchairBottomLeftBtn.setBackgroundResource(R.drawable.custom_bottom_btn_nonactivated)
             binding.wheelchairBottomRightBtn.setBackgroundResource(R.drawable.custom_bottom_btn_activated)
             checkbol = false
             CenterMark()
+            initCenterLayout()
         }
 
     }
@@ -118,8 +116,8 @@ class WheelchairMapActivity : AppCompatActivity() {
     private fun initCenterLayout(){
         Thread.sleep(3000L)
         val namearr =  mutableListOf<String>()
-        for (data in DataManager.wheelchair) {
-            namearr.add( data.fcltyNm)
+        for (data in DataManager.center) {
+            namearr.add( data.tfcwkerMvmnCnterNm)
         }
 
         val adapter = ArrayAdapter<String>(
@@ -132,8 +130,8 @@ class WheelchairMapActivity : AppCompatActivity() {
         autoCompleteTextView.setAdapter(adapter)
         val button = binding.button
         button.setOnClickListener{
-            for (data in DataManager.wheelchair) {
-                if(data.fcltyNm == autoCompleteTextView.text.toString()){
+            for (data in DataManager.center) {
+                if(data.tfcwkerMvmnCnterNm == autoCompleteTextView.text.toString()){
                     changeLatitude  = data.latitude.toDouble()
                     changeLongitude =data.longitude.toDouble()
                     val mapPoint = MapPoint.mapPointWithGeoCoord(changeLatitude, changeLongitude)
@@ -141,27 +139,21 @@ class WheelchairMapActivity : AppCompatActivity() {
                 }
 
             }
-            val url : String ="kakaomap://route?sp=$myLatitude,$myLongitude&ep=$changeLatitude,$changeLongitude&by=FOOT"
-            var intent =  Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            intent.addCategory(Intent.CATEGORY_BROWSABLE)
-            var list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-            //startActivity(intent)
-            if (list.equals("") && list.isEmpty()){
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=net.daum.android.map")))
-            }else{
-                startActivity(intent)
-            }
 
         }
         binding.wheelchairBottomLeftBtn.setOnClickListener {
             binding.wheelchairBottomLeftBtn.setBackgroundResource(R.drawable.custom_bottom_btn_activated)
             binding.wheelchairBottomRightBtn.setBackgroundResource(R.drawable.custom_bottom_btn_nonactivated)
+            checkbol = true
             WheelchairMark()
+            initWheelchairLayout()
         }
         binding.wheelchairBottomRightBtn.setOnClickListener {
             binding.wheelchairBottomLeftBtn.setBackgroundResource(R.drawable.custom_bottom_btn_nonactivated)
             binding.wheelchairBottomRightBtn.setBackgroundResource(R.drawable.custom_bottom_btn_activated)
+            checkbol = false
             CenterMark()
+            initCenterLayout()
         }
 
     }
@@ -308,8 +300,21 @@ class WheelchairMapActivity : AppCompatActivity() {
 
             // true -> putExtra centerType : Wheelchair // Center
             // if true
-            val intent = Intent(applicationContext, CenterActivity::class.java)
-            intent.putExtra("name", poiItem?.itemName)
+            if(poiItem?.itemName.equals("현 위치")) {
+                if (checkbol) {
+                    val intent = Intent(applicationContext, wheelchair::class.java)
+                    intent.putExtra("name", poiItem?.itemName)
+                    intent.putExtra("myLatitude", myLatitude)
+                    intent.putExtra("myLongitude", myLongitude)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(applicationContext, CenterActivity::class.java)
+                    intent.putExtra("name", poiItem?.itemName)
+                    intent.putExtra("myLatitude", myLatitude)
+                    intent.putExtra("myLongitude", myLongitude)
+                    startActivity(intent)
+                }
+            }
 //            intent.putExtra("centerType", "~")
 
             // if false
@@ -317,7 +322,7 @@ class WheelchairMapActivity : AppCompatActivity() {
 //            intent.putExtra("name", poiItem?.itemName)
 //            intent.putExtra("centerType", "~")
 
-            startActivity(intent)
+
         }
 
         override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, p1: MapPOIItem?) {
@@ -326,23 +331,7 @@ class WheelchairMapActivity : AppCompatActivity() {
 
         override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, p2: MapPOIItem.CalloutBalloonButtonType?
         ) {
-            //TODO("Not yet implemented")
-//            val builder = AlertDialog.Builder(context)
-//            val itemList = arrayOf("토스트", "마커 삭제", "취소")
-//            builder.setTitle("${poiItem?.itemName}")
-//            builder.setItems(itemList) { dialog, which ->
-//                when(which) {
-//                    0 -> Toast.makeText(context, "토스트", Toast.LENGTH_SHORT).show()  // 토스트
-//                    1 -> mapView?.removePOIItem(poiItem)    // 마커 삭제
-//                    2 -> dialog.dismiss()   // 대화상자 닫기
-//                }
-//            }
 //
-//
-//            val intent = Intent(applicationContext, WheelchairActivity::class.java)
-//            startActivity(intent)
-//
-//            builder.show()
         }
 
         override fun onDraggablePOIItemMoved(mapView: MapView?, p1: MapPOIItem?, p2: MapPoint?) {

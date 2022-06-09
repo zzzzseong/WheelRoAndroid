@@ -1,6 +1,7 @@
 package com.example.mobileprogramingproject_7
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,9 @@ import com.google.firebase.ktx.Firebase
 class WheelchairActivity : AppCompatActivity() {
     lateinit var binding: ActivityWheelchairBinding
     lateinit var centerName: String
+
+    private var changeLatitude = 0.0
+    private var changeLongitude = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,91 +43,96 @@ class WheelchairActivity : AppCompatActivity() {
 
             favBtn.setOnClickListener {
 
+                val col = db.collection("Users")
+                    .document(UserInfo.userID)
+                    .collection("favorite")
+                    .document(centerName)
+                    .get()
+                    .addOnSuccessListener {
+                        if(it.get("centerType")==null){
+                            addFav()
+                        }else
+                            delFav()
+                    }
+
             }
 
             arriveBtn.setOnClickListener {
+                var myLatitude = intent.getStringExtra("myLatitude")
+                var myLongitude = intent.getStringExtra("myLongitude")
+
+
+                val url : String ="kakaomap://route?sp=$myLatitude,$myLongitude&ep=$changeLatitude,$changeLongitude&by=FOOT"
+                var intent =  Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                intent.addCategory(Intent.CATEGORY_BROWSABLE)
+                var list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                //startActivity(intent)
+                if (list.equals("") && list.isEmpty()){
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=net.daum.android.map")))
+                }else{
+                    startActivity(intent)
+                }
 
             }
 
-            callBtn.setOnClickListener {
-
-            }
-//            rvplusBtn.setOnClickListener {
-//                val intent = Intent(applicationContext, ReviewPopupActivity::class.java)
-//                intent.putExtra("centerName", centerName)
-//                startActivity(intent)
-//            }
         }
     }
-
-//    private fun setRecyclerView() {
-//
-//        val recyclerView = binding.recyclerview
-//        recyclerView.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-//
-//        val reviews = ArrayList<DataReview>()
-//
-//
-//        db.collection("Centers")
-//            .document(centerName)
-//            .collection("userID")
-//            .get()
-//            .addOnSuccessListener {
-//                for(document in it){
-//                    val uid = document.id
-//                    val rv = document.getString("reviewString")!!
-//                    reviews.add(DataReview(uid,rv,centerName))
-//                    Log.d("logger", "id: $uid, rv: $rv")
-//                }
-//                val adapter = RevAdapter(reviews)
-//                recyclerView.adapter = adapter
-//            }
-//            .addOnFailureListener {
-//                it.printStackTrace()
-//            }
-//
-//    }
 
 
     private fun setDataLayout() {
         //인텐트로 DataWheelchair객체 넘김
 //        val data = intent.getSerializableExtra("wheelchair") as DataWheelchair
 
-        //테스트용객체
-        Thread.sleep(5000L)
-        val data = DataManager.wheelchair[0]
 
-        centerName = "Center1"
+        for (data in DataManager.wheelchair) {
+            if (data.fcltyNm == intent.getStringExtra("name")) {
+                centerName = "Center1"
+                changeLatitude = data.latitude.toDouble()
+                changeLongitude = data.longitude.toDouble()
 
 
-        binding.apply {
-            TitleView.text = data.fcltyNm
-            AddrView.text = data.rdnmadr
-            PhoneView.text = data.institutionPhoneNumber
-            instlView.text =  data.instlLcDesc
+                binding.apply {
+                    TitleView.text = data.fcltyNm
+                    AddrView.text = data.rdnmadr
+                    PhoneView.text = data.institutionPhoneNumber
+                    instlView.text =  data.instlLcDesc
 
-            var timestr = "평  일 "+data.weekdayOperOpenHhmm+" ~ "+data.weekdayOperColseHhmm+"\n"
-            timestr+="토요일 "+data.satOperOperOpenHhmm+" ~ "+data.satOperCloseHhmm+"\n"
-            timestr+="공휴일 "+data.holidayOperOpenHhmm+" ~ "+data.holidayCloseOpenHhmm
+                    var timestr = "평  일 "+data.weekdayOperOpenHhmm+" ~ "+data.weekdayOperColseHhmm+"\n"
+                    timestr+="토요일 "+data.satOperOperOpenHhmm+" ~ "+data.satOperCloseHhmm+"\n"
+                    timestr+="공휴일 "+data.holidayOperOpenHhmm+" ~ "+data.holidayCloseOpenHhmm
 
-            timeView.text = timestr
+                    timeView.text = timestr
 
-            callBtn.setOnClickListener {
-                val intentCall = Intent(Intent.ACTION_CALL, Uri.parse(data.institutionPhoneNumber))
-                startActivity(intentCall)
+                    callBtn.setOnClickListener {
+                        val intentCall = Intent(Intent.ACTION_CALL, Uri.parse("tel:"+data.institutionPhoneNumber))
+                        startActivity(intentCall)
+                    }
+                }
+
+                binding.reviewBtn.setOnClickListener {
+                    val rvintent = Intent(this, ReviewActivity::class.java)
+                    rvintent.putExtra("centerName", centerName)
+                    rvintent.putExtra("centerType", "Wheelchair")
+                    startActivity(rvintent)
+                }
+
             }
         }
 
+
+
     }
 
+
+
     fun addFav(){
-        val fav = hashMapOf(
+        var fav = hashMapOf(
             "favorite" to false,
-            "centerType" to "Center",
+            "centerType" to "Wheelchair",
             "centerName" to centerName
         )
 
-        UserInfo.db.collection("Centers").document(centerName)
+        db.collection("Centers").document(centerName)
             .collection("userID")
             .document(UserInfo.userID)
             .set(fav, SetOptions.merge())
@@ -134,12 +143,16 @@ class WheelchairActivity : AppCompatActivity() {
                 Log.w("logger", "Error adding document", e)
             }
 
-        UserInfo.db.collection("Users").document(UserInfo.userID)
+        fav = hashMapOf(
+            "centerType" to "Wheelchair",
+            "centerName" to centerName
+        )
+
+        db.collection("Users").document(UserInfo.userID)
             .collection("favorite")
             .document(centerName)
-            .set(fav, SetOptions.merge())
+            .set(fav)
             .addOnSuccessListener {
-                Log.d("logger", "review saved to user DB")
                 Toast.makeText(applicationContext, "즐겨찾기에 등록되었습니다", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
@@ -159,7 +172,6 @@ class WheelchairActivity : AppCompatActivity() {
             .document(UserInfo.userID)
             .set(fav, SetOptions.merge())
             .addOnSuccessListener {
-                Log.d("logger", "review saved to center DB")
             }
             .addOnFailureListener { e ->
                 Log.w("logger", "Error adding document", e)
@@ -168,15 +180,17 @@ class WheelchairActivity : AppCompatActivity() {
         UserInfo.db.collection("Users").document(UserInfo.userID)
             .collection("favorite")
             .document(centerName)
-            .set(fav, SetOptions.merge())
+            .delete()
             .addOnSuccessListener {
-                Log.d("logger", "review saved to user DB")
+
                 Toast.makeText(applicationContext, "즐겨찾기에서 해제되었습니다", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
                 Log.w("logger", "Error adding document", e)
             }
     }
+
+
 
 
 }
