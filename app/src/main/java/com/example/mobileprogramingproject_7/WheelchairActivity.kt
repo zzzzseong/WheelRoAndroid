@@ -5,11 +5,13 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobileprogramingproject_7.UserInfo.db
 import com.example.mobileprogramingproject_7.UserInfo.userID
 import com.example.mobileprogramingproject_7.databinding.ActivityMainBinding
 import com.example.mobileprogramingproject_7.databinding.ActivityWheelchairBinding
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -88,9 +90,8 @@ class WheelchairActivity : AppCompatActivity() {
 //        val data = intent.getSerializableExtra("wheelchair") as DataWheelchair
 
         //테스트용객체
-        val manager = DataManager()
         Thread.sleep(5000L)
-        val data = manager.wheelchair[0]
+        val data = DataManager.wheelchair[0]
 
         centerName = "Center1"
 
@@ -115,7 +116,67 @@ class WheelchairActivity : AppCompatActivity() {
 
     }
 
+    fun addFav(){
+        val fav = hashMapOf(
+            "favorite" to false,
+            "centerType" to "Center",
+            "centerName" to centerName
+        )
 
+        UserInfo.db.collection("Centers").document(centerName)
+            .collection("userID")
+            .document(UserInfo.userID)
+            .set(fav, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("logger", "review saved to center DB")
+            }
+            .addOnFailureListener { e ->
+                Log.w("logger", "Error adding document", e)
+            }
+
+        UserInfo.db.collection("Users").document(UserInfo.userID)
+            .collection("favorite")
+            .document(centerName)
+            .set(fav, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("logger", "review saved to user DB")
+                Toast.makeText(applicationContext, "즐겨찾기에 등록되었습니다", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.w("logger", "Error adding document", e)
+            }
+    }
+
+    fun delFav(){
+        val fav = hashMapOf(
+            "favorite" to false,
+            "centerType" to "Wheelchair",
+            "centerName" to centerName
+        )
+
+        UserInfo.db.collection("Centers").document(centerName)
+            .collection("userID")
+            .document(UserInfo.userID)
+            .set(fav, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("logger", "review saved to center DB")
+            }
+            .addOnFailureListener { e ->
+                Log.w("logger", "Error adding document", e)
+            }
+
+        UserInfo.db.collection("Users").document(UserInfo.userID)
+            .collection("favorite")
+            .document(centerName)
+            .set(fav, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("logger", "review saved to user DB")
+                Toast.makeText(applicationContext, "즐겨찾기에서 해제되었습니다", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.w("logger", "Error adding document", e)
+            }
+    }
 
 
 }

@@ -2,14 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mobileprogramingproject_7">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 지도 관련 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 지도 관련 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".KakaoApplication"
@@ -19,12 +16,15 @@
         android:networkSecurityConfig="@xml/network_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.MobileProgramingProject_7">
+        android:theme="@style/Theme.MobileProgramingProject_7"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ReviewActivity"
+            android:exported="false" />
         <activity
             android:name=".MypageActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.Light.NoActionBar"/>
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
             android:name=".TestActivity"
             android:exported="false"
@@ -34,24 +34,19 @@
         <activity
             android:name=".LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.MobileProgramingProject_7.NoActionBar"/>
-
-        <activity android:name=".WheelchairMapActivity"/>
-        <activity android:name=".CenterMapActivity"/>
-
-        <!-- 로딩(스플래시) 액티비티. 액션바 안보이게 제거 - 윤섭 -->
+            android:theme="@style/Theme.MobileProgramingProject_7.NoActionBar" />
+        <activity android:name=".WheelchairMapActivity" />
+        <activity android:name=".CenterMapActivity" /> <!-- 로딩(스플래시) 액티비티. 액션바 안보이게 제거 - 윤섭 -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Design.Light.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- 카카오 로그인 Redirect URI 관련 설정 - 윤섭 -->
+        </activity> <!-- 카카오 로그인 Redirect URI 관련 설정 - 윤섭 -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -67,32 +62,27 @@
                     android:scheme="kakao916252b1d687bf94d0ebf57bf3f59fcb" />
             </intent-filter>
         </activity>
-        <activity android:name=".CenterActivity"
+        <activity
+            android:name=".CenterActivity"
             android:exported="true"
-            android:theme="@style/Theme.MobileProgramingProject_7.NoActionBar"
-            >
-
+            android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity android:name=".ReviewPopupActivity"-->
-<!--            android:exported="true"-->
-<!--            android:theme="@style/Theme.MobileProgramingProject_7.PopupOverlay"-->
-<!--            />-->
-
-        <activity android:name=".WheelchairActivity"
+        <activity
+            android:name=".ReviewPopupActivity"
             android:exported="true"
-            android:theme="@style/Theme.MobileProgramingProject_7.NoActionBar"
-            >
-        </activity>
-        <!-- 카카오 지도 api 사용 - 주한 -->
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".WheelchairActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Dialog"></activity> <!-- 카카오 지도 api 사용 - 주한 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="916252b1d687bf94d0ebf57bf3f59fcb"/>
-
+            android:value="986e179f14d8059be6ff7a007ba11cdd" />
     </application>
 
 </manifest>

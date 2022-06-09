@@ -4,11 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.util.Log
+import android.widget.Toast
+import com.example.mobileprogramingproject_7.UserInfo.db
 import com.example.mobileprogramingproject_7.databinding.ActivityCenterBinding
-import com.example.mobileprogramingproject_7.databinding.ActivityWheelchairBinding
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.SetOptions
 
 class CenterActivity : AppCompatActivity() {
     lateinit var binding : ActivityCenterBinding
@@ -31,6 +31,20 @@ class CenterActivity : AppCompatActivity() {
             }
 
             favBtn.setOnClickListener {
+                db.collection("Users")
+                    .document(UserInfo.userID)
+                    .collection("favorite")
+                    .document(centerName)
+                    .get()
+                    .addOnSuccessListener {
+                        if(it==null){
+                            addFav()
+                        }else{
+                            delFav()
+                        }
+                    }.addOnFailureListener {
+                        it.printStackTrace()
+                    }
 
 
             }
@@ -38,51 +52,24 @@ class CenterActivity : AppCompatActivity() {
             arriveBtn.setOnClickListener {
 
             }
+        }
 
-//            rvplusBtn.setOnClickListener {
-//                val intent = Intent(applicationContext, ReviewPopupActivity::class.java)
-//                intent.putExtra("centerName", centerName)
-//                startActivity(intent)
-//            }
+
+        binding.reviewBtn.setOnClickListener {
+            val rvintent = Intent(this, ReviewActivity::class.java)
+            rvintent.putExtra("centerName", centerName)
+            rvintent.putExtra("centerType", "Center")
+            startActivity(rvintent)
         }
     }
 
-//    private fun setRecyclerView() {
-//        //리뷰 Data Class 가져와서 리사이클러뷰 초기화해야함
-//        val recyclerView = binding.recyclerview
-//        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-//
-//        val reviews = ArrayList<DataReview>()
-//
-//        val db = Firebase.firestore
-//        db.collection("Centers")
-//            .document(centerName)
-//            .collection("userID")
-//            .whereEqualTo("centerType", "Center")
-//            .get()
-//            .addOnSuccessListener {
-//                for(document in it){
-//                    val id = document.id
-//                    val rv = document.getString("reviewString")!!
-//                    reviews.add(DataReview(UserInfo.userID,rv,id))
-//                }
-//            }
-//            .addOnFailureListener {
-//                it.printStackTrace()
-//
-//            }
-//
-//        val adapter = RevAdapter(reviews)
-//        recyclerView.adapter = adapter
-//    }
 
     private fun setDataLayout() {
         //인텐트로 DataWheelchair객체 넘김
         //val data = intent.getSerializableExtra("center") as DataCenter
 
-        val manager = DataManager()
         Thread.sleep(3000L)
-        val data = manager.center[0]
+        val data = DataManager.center[0]
 
         centerName = data.tfcwkerMvmnCnterNm
 
@@ -112,5 +99,70 @@ class CenterActivity : AppCompatActivity() {
         }
 
     }
+
+
+    fun addFav(){
+        val fav = hashMapOf(
+            "favorite" to false,
+            "centerType" to "Center",
+            "centerName" to centerName
+        )
+
+        UserInfo.db.collection("Centers").document(centerName)
+            .collection("userID")
+            .document(UserInfo.userID)
+            .set(fav, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("logger", "review saved to center DB")
+            }
+            .addOnFailureListener { e ->
+                Log.w("logger", "Error adding document", e)
+            }
+
+        UserInfo.db.collection("Users").document(UserInfo.userID)
+            .collection("favorite")
+            .document(centerName)
+            .set(fav, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("logger", "review saved to user DB")
+                Toast.makeText(applicationContext, "즐겨찾기에 등록되었습니다",Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.w("logger", "Error adding document", e)
+            }
+    }
+
+    fun delFav(){
+        val fav = hashMapOf(
+            "favorite" to false,
+            "centerType" to "Center",
+            "centerName" to centerName
+        )
+
+        UserInfo.db.collection("Centers").document(centerName)
+            .collection("userID")
+            .document(UserInfo.userID)
+            .set(fav, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("logger", "review saved to center DB")
+            }
+            .addOnFailureListener { e ->
+                Log.w("logger", "Error adding document", e)
+            }
+
+        UserInfo.db.collection("Users").document(UserInfo.userID)
+            .collection("favorite")
+            .document(centerName)
+            .delete()
+            .addOnSuccessListener {
+                Log.d("logger", "review saved to user DB")
+                Toast.makeText(applicationContext, "즐겨찾기에서 해제되었습니다",Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.w("logger", "Error adding document", e)
+            }
+    }
+
+
 
 }

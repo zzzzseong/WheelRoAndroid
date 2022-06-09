@@ -18,9 +18,15 @@
         <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/fragment_review.xml" value="0.221875" />
         <entry key="..\:/Users/s_jsshin0107/AndroidStudioProjects/MPproject/app/src/main/res/layout/rev_row.xml" value="0.2635416666666667" />
         <entry key="app/src/main/res/drawable/btnbackground.xml" value="0.1185" />
+        <entry key="app/src/main/res/drawable/custom_mypageprofile.xml" value="0.255" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1185" />
         <entry key="app/src/main/res/drawable/prfimg.xml" value="0.1185" />
         <entry key="app/src/main/res/drawable/star.xml" value="0.1185" />
+        <entry key="app/src/main/res/layout/activity_centermap.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_mypage.xml" value="0.1859375" />
+        <entry key="app/src/main/res/layout/activity_review.xml" value="0.20677083333333332" />
+        <entry key="app/src/main/res/layout/activity_wheelchair.xml" value="0.1766304347826087" />
+        <entry key="app/src/main/res/layout/activity_wheelchairmap.xml" value="0.1859375" />
       </map>
     </option>
   </component>

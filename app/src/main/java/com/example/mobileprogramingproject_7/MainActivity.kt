@@ -18,7 +18,7 @@ import java.security.MessageDigest
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private val DURATION : Long = 3000L
-    val dm: DataManager = DataManager()
+//    val dm: DataManager = DataManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +28,11 @@ class MainActivity : AppCompatActivity() {
 
 
         Handler().postDelayed({
+            DataManager.initData()
             val intent = Intent(this, LoginActivity::class.java)
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
-            Toast.makeText(this, "Data Load Complete", Toast.LENGTH_SHORT).show() //
+            Toast.makeText(this, "Data Load Complete", Toast.LENGTH_SHORT).show()
             finish()
         },DURATION)
     }

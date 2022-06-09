@@ -1,6 +1,7 @@
 package com.example.mobileprogramingproject_7
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,14 +11,19 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.widget.addTextChangedListener
+import com.example.mobileprogramingproject_7.DataManager.wheelchair
 import com.example.mobileprogramingproject_7.databinding.ActivityWheelchairmapBinding
 import com.google.android.gms.location.*
+import net.daum.mf.map.api.CalloutBalloonAdapter
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
+import java.util.zip.Inflater
 
 
 class WheelchairMapActivity : AppCompatActivity() {
@@ -32,8 +38,10 @@ class WheelchairMapActivity : AppCompatActivity() {
     private var changeLongitude = 0.0
     private var myLatitude = 0.0
     private var myLongitude = 0.0
+    private var checkbol = true
 
-
+    private var markerArr = ArrayList<MapPOIItem>()
+    private val eventListener = MarkerEventListener(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +49,23 @@ class WheelchairMapActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         startMap()
-        dataMark()
-        initLayout()
+        WheelchairMark()
+        if(checkbol){
+            initWheelchairLayout()
+        }
+        else {
+            initCenterLayout()
+        }
+
+        //binding.mapView.setCalloutBalloonAdapter(CustomBalloonAdapter(layoutInflater))
+        binding.mapView.setPOIItemEventListener(eventListener)
 
     }
 
-    private fun initLayout(){
-        val manager = DataManager()
+    private fun initWheelchairLayout(){
         Thread.sleep(3000L)
         val namearr =  mutableListOf<String>()
-        for (data in manager.wheelchair) {
+        for (data in DataManager.wheelchair) {
             namearr.add( data.fcltyNm)
         }
 
@@ -64,7 +79,7 @@ class WheelchairMapActivity : AppCompatActivity() {
         autoCompleteTextView.setAdapter(adapter)
         val button = binding.button
         button.setOnClickListener{
-            for (data in manager.wheelchair) {
+            for (data in DataManager.wheelchair) {
                 if(data.fcltyNm == autoCompleteTextView.text.toString()){
                     changeLatitude  = data.latitude.toDouble()
                     changeLongitude =data.longitude.toDouble()
@@ -85,19 +100,84 @@ class WheelchairMapActivity : AppCompatActivity() {
             }
 
         }
-
-
+        binding.wheelchairBottomLeftBtn.setOnClickListener {
+            binding.wheelchairBottomLeftBtn.setBackgroundResource(R.drawable.custom_bottom_btn_activated)
+            binding.wheelchairBottomRightBtn.setBackgroundResource(R.drawable.custom_bottom_btn_nonactivated)
+            checkbol = true
+            WheelchairMark()
+        }
+        binding.wheelchairBottomRightBtn.setOnClickListener {
+            binding.wheelchairBottomLeftBtn.setBackgroundResource(R.drawable.custom_bottom_btn_nonactivated)
+            binding.wheelchairBottomRightBtn.setBackgroundResource(R.drawable.custom_bottom_btn_activated)
+            checkbol = false
+            CenterMark()
+        }
 
     }
-    //데이터 마크표시
-    private fun dataMark(){
 
-        val manager = DataManager()
+    private fun initCenterLayout(){
         Thread.sleep(3000L)
+        val namearr =  mutableListOf<String>()
+        for (data in DataManager.wheelchair) {
+            namearr.add( data.fcltyNm)
+        }
+
+        val adapter = ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            namearr
+        )
+        val autoCompleteTextView = binding.autoCompleteTextView
+
+        autoCompleteTextView.setAdapter(adapter)
+        val button = binding.button
+        button.setOnClickListener{
+            for (data in DataManager.wheelchair) {
+                if(data.fcltyNm == autoCompleteTextView.text.toString()){
+                    changeLatitude  = data.latitude.toDouble()
+                    changeLongitude =data.longitude.toDouble()
+                    val mapPoint = MapPoint.mapPointWithGeoCoord(changeLatitude, changeLongitude)
+                    binding.mapView.setMapCenterPointAndZoomLevel(mapPoint, 1, true)
+                }
+
+            }
+            val url : String ="kakaomap://route?sp=$myLatitude,$myLongitude&ep=$changeLatitude,$changeLongitude&by=FOOT"
+            var intent =  Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addCategory(Intent.CATEGORY_BROWSABLE)
+            var list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+            //startActivity(intent)
+            if (list.equals("") && list.isEmpty()){
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=net.daum.android.map")))
+            }else{
+                startActivity(intent)
+            }
+
+        }
+        binding.wheelchairBottomLeftBtn.setOnClickListener {
+            binding.wheelchairBottomLeftBtn.setBackgroundResource(R.drawable.custom_bottom_btn_activated)
+            binding.wheelchairBottomRightBtn.setBackgroundResource(R.drawable.custom_bottom_btn_nonactivated)
+            WheelchairMark()
+        }
+        binding.wheelchairBottomRightBtn.setOnClickListener {
+            binding.wheelchairBottomLeftBtn.setBackgroundResource(R.drawable.custom_bottom_btn_nonactivated)
+            binding.wheelchairBottomRightBtn.setBackgroundResource(R.drawable.custom_bottom_btn_activated)
+            CenterMark()
+        }
+
+    }
+
+
+    //데이터 마크표시
+    private fun WheelchairMark(){
+
+        //Thread.sleep(3000L)
         //val data = manager.wheelchair[0]
 
-        val markerArr = ArrayList<MapPOIItem>()
-        for (data in manager.wheelchair) {
+
+
+        binding.mapView.removePOIItems(markerArr.toArray(arrayOfNulls<MapPOIItem>(markerArr.size)))
+        markerArr = ArrayList<MapPOIItem>()
+        for (data in DataManager.wheelchair) {
             val marker = MapPOIItem()
             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude.toDouble(), data.longitude.toDouble())
             marker.itemName = data.fcltyNm
@@ -105,7 +185,26 @@ class WheelchairMapActivity : AppCompatActivity() {
         }
         binding.mapView.addPOIItems(markerArr.toArray(arrayOfNulls<MapPOIItem>(markerArr.size)))
 
+
     }
+
+    private fun CenterMark(){
+
+        binding.mapView.removePOIItems(markerArr.toArray(arrayOfNulls<MapPOIItem>(markerArr.size)))
+        markerArr = ArrayList<MapPOIItem>()
+        for (data in DataManager.center) {
+            val marker = MapPOIItem()
+            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude.toDouble(), data.longitude.toDouble())
+            marker.itemName = data.tfcwkerMvmnCnterNm
+
+            markerArr.add(marker)
+        }
+        binding.mapView.addPOIItems(markerArr.toArray(arrayOfNulls<MapPOIItem>(markerArr.size)))
+
+
+
+    }
+
 
     private fun startMap(){
         mLocationRequest =  LocationRequest.create().apply {
@@ -187,6 +286,69 @@ class WheelchairMapActivity : AppCompatActivity() {
         marker.markerType = MapPOIItem.MarkerType.BluePin
         marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
         binding.mapView.addPOIItem(marker)
+    }
+
+    /*inner class CustomBalloonAdapter(inflater: LayoutInflater): CalloutBalloonAdapter {
+        val mCalloutBalloon: View = inflater.inflate(R.layout.activity_wheelchair, null)
+        val startBtn: Button = mCalloutBalloon.findViewById(R.id.startBtn)
+        override fun getCalloutBalloon(poiItem: MapPOIItem?): View {
+
+            return mCalloutBalloons
+        }
+
+        override fun getPressedCalloutBalloon(poiItem: MapPOIItem?) {
+            //TODO("Not yet implemented")
+
+        }
+
+    }*/
+    
+    inner class MarkerEventListener(val context: Context): MapView.POIItemEventListener {
+        override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
+
+            // true -> putExtra centerType : Wheelchair // Center
+            // if true
+            val intent = Intent(applicationContext, CenterActivity::class.java)
+            intent.putExtra("name", poiItem?.itemName)
+//            intent.putExtra("centerType", "~")
+
+            // if false
+//            val intent = Intent(applicationContext, ~::class.java)
+//            intent.putExtra("name", poiItem?.itemName)
+//            intent.putExtra("centerType", "~")
+
+            startActivity(intent)
+        }
+
+        override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, p1: MapPOIItem?) {
+            //TODO("Not yet implemented")
+        }
+
+        override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, p2: MapPOIItem.CalloutBalloonButtonType?
+        ) {
+            //TODO("Not yet implemented")
+//            val builder = AlertDialog.Builder(context)
+//            val itemList = arrayOf("토스트", "마커 삭제", "취소")
+//            builder.setTitle("${poiItem?.itemName}")
+//            builder.setItems(itemList) { dialog, which ->
+//                when(which) {
+//                    0 -> Toast.makeText(context, "토스트", Toast.LENGTH_SHORT).show()  // 토스트
+//                    1 -> mapView?.removePOIItem(poiItem)    // 마커 삭제
+//                    2 -> dialog.dismiss()   // 대화상자 닫기
+//                }
+//            }
+//
+//
+//            val intent = Intent(applicationContext, WheelchairActivity::class.java)
+//            startActivity(intent)
+//
+//            builder.show()
+        }
+
+        override fun onDraggablePOIItemMoved(mapView: MapView?, p1: MapPOIItem?, p2: MapPoint?) {
+            //TODO("Not yet implemented")
+        }
+
     }
 
 

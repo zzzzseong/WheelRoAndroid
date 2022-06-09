@@ -8,18 +8,20 @@ import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 
-class DataManager {
+object DataManager {
     val wheelchair: ArrayList<DataWheelchair> = arrayListOf()
     val center: ArrayList<DataCenter> = arrayListOf()
     val scope = CoroutineScope(Dispatchers.IO)
     val urlWheelchair = "http://api.data.go.kr/openapi/tn_pubr_public_electr_whlchairhgh_spdchrgr_api?serviceKey=6mHJyQoASvnGKqv3mTvlcq5GldACNku2xT2pOH0l6kqSEkSnI572eSVQKrqThotBKF%2FDGjb4jHUrKhxcP%2FWqYA%3D%3D" //open api endformat + serviceKey
     val urlCenter = "http://api.data.go.kr/openapi/tn_pubr_public_tfcwker_mvmn_cnter_api?serviceKey=6mHJyQoASvnGKqv3mTvlcq5GldACNku2xT2pOH0l6kqSEkSnI572eSVQKrqThotBKF%2FDGjb4jHUrKhxcP%2FWqYA%3D%3D" //open api endformat + serviceKey
 
-    init {
-        initData()
-    }
+//    init {
+//        initData()
+//    }
 
-    private fun initData() {
+
+//    private
+    fun initData() {
         //open api 통해서 xml data가져온 후 list에 저장
         scope.launch {
             wheelchairLaunch()

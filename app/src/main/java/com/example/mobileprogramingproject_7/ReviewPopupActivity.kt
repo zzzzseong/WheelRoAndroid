@@ -24,6 +24,7 @@ class ReviewPopupActivity : AppCompatActivity() {
 
     private fun initLayout() {
         val centerName = intent.getStringExtra("centerName")!!
+        binding.TitleView.text = centerName
         db.collection("Centers").document(centerName)
             .collection("userID")
             .document(userID)

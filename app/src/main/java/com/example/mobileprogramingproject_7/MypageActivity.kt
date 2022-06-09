@@ -54,20 +54,25 @@ class MypageActivity : AppCompatActivity() {
         // 로그아웃
         binding.logoutBtn.setOnClickListener {
             // 로그아웃 시 로그인 화면으로 이동
-            // UserApiClient.instance.unlink / logout
             UserApiClient.instance.unlink { error ->
                 if (error != null) {
-                    Toast.makeText(this, "로그아웃 실패. SDK에서 토큰 삭제됨",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Logout Error. SDK에서 토큰 삭제됨",Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                 }
                 else {
-                    Toast.makeText(this, "로그아웃 성공. SDK에서 토큰 삭제됨",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Logout Success. SDK에서 토큰 삭제됨",Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                 }
             }
         }
         Log.i(ContentValues.TAG, "로그) InitLayout Done in MypageActivity")
+
+        // 버튼 이벤트
+        binding.leftBtn.setOnClickListener {
+            super.onBackPressed()
+        }
+
     }
 }
