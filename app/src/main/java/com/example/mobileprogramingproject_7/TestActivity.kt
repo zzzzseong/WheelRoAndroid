@@ -48,10 +48,10 @@ class TestActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.button4.setOnClickListener {
-            val intent = Intent(this, CenterMapActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.button4.setOnClickListener {
+//            val intent = Intent(this, CenterMapActivity::class.java)
+//            startActivity(intent)
+//        }
 
     }
 

@@ -31,7 +31,8 @@ object UserInfo {
                     val type = document.getString("centerType")
                     val str = document.getString("reviewString")!!
 //                    Log.i(ContentValues.TAG, "centerName : ${centerName}, type : ${type}, str : ${str}")
-                    userRVList.add(DataReview(userID, str, centerName))
+                    Log.i(ContentValues.TAG, "str : ${str}")
+                    if(str!="") userRVList.add(DataReview(userID, str, centerName))
                 }
                 Log.i(ContentValues.TAG, "로그) ${UserInfo.userRVList.size} rev list size in UserInfo.getListData")
 

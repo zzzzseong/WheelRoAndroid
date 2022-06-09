@@ -40,7 +40,8 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
 
-                val intent = Intent(this, TestActivity::class.java)
+//                val intent = Intent(this, TestActivity::class.java)
+                val intent = Intent(this, WheelchairMapActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
             }
@@ -91,7 +92,9 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
 
-                val intent = Intent(this, TestActivity::class.java)
+//                val intent = Intent(this, TestActivity::class.java)
+
+                val intent = Intent(this, WheelchairMapActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
             }

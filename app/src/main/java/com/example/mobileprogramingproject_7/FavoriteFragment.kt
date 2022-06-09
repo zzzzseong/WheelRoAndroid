@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
@@ -30,8 +31,32 @@ class FavoriteFragment : Fragment() {
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
-                adapter = MypageFavRecyclerAdapter(UserInfo.userFavList) // arrayList 타입 생성자 생성해야함
+                val adapter = MypageFavRecyclerAdapter(UserInfo.userFavList) // arrayList 타입 생성자 생성해야함
+
+                view.adapter = adapter
+
+                val simpleItemTouchCallback = object: ItemTouchHelper.SimpleCallback(
+                    ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT){
+                    override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                    ): Boolean {
+                        adapter.moveItem(viewHolder.adapterPosition, target.adapterPosition)
+                        return true
+                    }
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                        adapter.removeItem(viewHolder.adapterPosition)
+                    }
+
+                }
+
+                val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+                itemTouchHelper.attachToRecyclerView(view)
+
             }
+
         }
 
         Log.i(ContentValues.TAG, "로그) FavoriteFragement Created with adapter")
